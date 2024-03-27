@@ -1,12 +1,12 @@
 import React from "react";
-import { createPortal } from "react-dom";
+import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
-import "./Modal.css";
 import Backdrop from "./Backdrop";
+import "./Modal.css";
 
 const ModalOverlay = (props) => {
-  return createPortal(
+  const content = (
     <div className={`modal ${props.className}`} style={props.style}>
       <header className={`modal__header ${props.headerClass}`}>
         <h2>{props.header}</h2>
@@ -19,18 +19,18 @@ const ModalOverlay = (props) => {
         <div className={`modal__content ${props.contentClass}`}>
           {props.children}
         </div>
-        <footer className={`modal_-footer ${props.footerClass}`}>
+        <footer className={`modal__footer ${props.footerClass}`}>
           {props.footer}
         </footer>
       </form>
-    </div>,
-    document.getElementById("modal-hook")
+    </div>
   );
+  return ReactDOM.createPortal(content, document.getElementById("modal-hook"));
 };
 
 const Modal = (props) => {
   return (
-    <>
+    <React.Fragment>
       {props.show && <Backdrop onClick={props.onCancel} />}
       <CSSTransition
         in={props.show}
@@ -41,7 +41,7 @@ const Modal = (props) => {
       >
         <ModalOverlay {...props} />
       </CSSTransition>
-    </>
+    </React.Fragment>
   );
 };
 
